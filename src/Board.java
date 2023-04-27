@@ -22,15 +22,13 @@ public class Board extends JPanel {
   private Ball ball2;
   private Paddle paddle;
   private Brick[] bricks;
-  private Brick[] bricks2;
   private boolean inGame = true;
-  private int num_bricks = 1;
   private boolean done;
 
   public static int lvl = 0;
 
   public static boolean getl2() {
-    //static boolean l2 = lvl == 1;
+    // static boolean l2 = lvl == 1;
     return lvl == 1;
   }
 
@@ -49,17 +47,19 @@ public class Board extends JPanel {
   }
 
   private void gameInit() {
-    newGame(num_bricks);
+    newGame(1);
   }
 
   private void gameInitLevel2() {
     lvl = 1;
-    num_bricks = (int) (Math.random() * 5)+1;
-    newGame(num_bricks); //half because x and y req
+    int num_bricks =(int) (Math.random() * 5) + 1;
+    // Log the number of bricks
+    System.out.println("Number of bricks on x: " + num_bricks);
+    newGame(num_bricks); // half because x and y req
   }
 
   private void newGame(int NumberOfBricks) {
-    if (lvl == 0){
+    if (lvl == 0) {
       bricks = new Brick[NumberOfBricks];
 
       ball = new Ball();
@@ -86,13 +86,11 @@ public class Board extends JPanel {
 
       timer = new Timer(Commons.PERIOD, new GameCycle());
       timer.start();
-    }
-    else
-    {
-      int rndm = (int) (Math.random() * 6) +1;
-      bricks2 = new Brick[NumberOfBricks];
+    } else {
+      int rndm = (int) (Math.random() * 6) + 1;
+      bricks = new Brick[NumberOfBricks];
       ball = new Ball();
-      //ball2 = new Ball();
+      // ball2 = new Ball();
       paddle = new Paddle();
 
       int k = 0;
@@ -105,7 +103,7 @@ public class Board extends JPanel {
           if (done)
             break;
 
-          bricks2[k] = new Brick(j * 40 + 30, i * 10 + 50);
+          bricks[k] = new Brick(j * 40 + 30, i * 10 + 50);
           k++;
           if (k == NumberOfBricks) {
             done = true;
@@ -149,7 +147,7 @@ public class Board extends JPanel {
     g2d.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(),
         paddle.getImageWidth(), paddle.getImageHeight(), this);
 
-    for (int i = 0; i < num_bricks; i++) {
+    for (int i = 0; i < bricks.length; i++) {
 
       if (!bricks[i].isDestroyed()) {
 
@@ -219,21 +217,22 @@ public class Board extends JPanel {
     }
 
     // determine whether user has destroyed all the bricks
-    for (int i = 0, j = 0; i < num_bricks; i++) {
+    if (bricks.length > 0) {
+      for (int i = 0, j = 0; i < bricks.length; i++) {
 
-      if (bricks[i].isDestroyed()) {
+        if (bricks[i].isDestroyed()) {
 
-        j++;
-      }
+          j++;
+        }
 
-      if (j == num_bricks) {
-        // if(lvl == 1)
-        //   stopGame();
+        if (j == bricks.length) {
+          if (lvl == 1) stopGame(); 
 
-        //message = "level 1 victory";
-        // stopGame();
-        gameInitLevel2();
+          // message = "level 1 victory";
+          // stopGame();
+          gameInitLevel2();
 
+        }
       }
     }
 
@@ -283,7 +282,12 @@ public class Board extends JPanel {
     }
 
     // if ball and brick collide
-    for (int i = 0; i < num_bricks; i++) {
+    for (int i = 0; i < bricks.length; i++) {
+      // Log bricks and i
+      System.out.println("Bricks"); //bricks at 1 and i at 0, twice: cont
+      System.out.println(bricks.length);
+      System.out.println("i");
+      System.out.println(i);
 
       if ((ball.getRect()).intersects(bricks[i].getRect())) {
 
