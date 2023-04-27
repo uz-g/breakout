@@ -20,7 +20,7 @@ public class Paddle extends Sprite {
 
   private void loadImage() {
 
-    var ii = new ImageIcon("images_breakout/paddle.png");
+    var ii = new ImageIcon("src/images_breakout/paddle.png");
     image = ii.getImage();
   }
 
@@ -45,7 +45,6 @@ public class Paddle extends Sprite {
 
     if (key == KeyEvent.VK_LEFT) {
 
-      
       dx = -1;
 
     }

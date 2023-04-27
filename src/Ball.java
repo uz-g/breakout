@@ -22,7 +22,7 @@ public class Ball extends Sprite {
 
   private void loadImage() {
 
-    var ii = new ImageIcon("images_breakout/ball.png");
+    var ii = new ImageIcon("src/images_breakout/ball.png");
     image = ii.getImage();
   }
 

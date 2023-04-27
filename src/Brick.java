@@ -24,15 +24,14 @@ public class Brick extends Sprite {
   private void loadImage() {
 
     if (l2) {
-      var ii = new ImageIcon("images_breakout/brick2.png");
+      var ii = new ImageIcon("src/images_breakout/brick2.png");
       image = ii.getImage();
     } else {
-      var ii = new ImageIcon("images_breakout/brick.png");
+      var ii = new ImageIcon("src/images_breakout/brick.png");
       image = ii.getImage();
     }
-    
 
-    //image = ii.getImage();
+    // image = ii.getImage();
   }
 
   boolean isDestroyed() {
