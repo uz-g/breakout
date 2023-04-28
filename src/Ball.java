@@ -49,7 +49,7 @@ public class Ball extends Sprite {
     }
   }
 
-  private void resetState() {
+  public void resetState() {
 
     x = Commons.INIT_BALL_X;
     y = Commons.INIT_BALL_Y;

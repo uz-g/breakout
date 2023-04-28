@@ -18,6 +18,7 @@ public class Board extends JPanel {
 
   private Timer timer;
   private String message = "Game Over";
+  private BallController ballController;
   private Ball ball;
   private Ball ball2;
   private Paddle paddle;
@@ -49,7 +50,7 @@ public class Board extends JPanel {
   }
 
   private void gameInit() {
-    newGame(1);
+    newGame(1, 1);
   }
 
   private void gameInitLevel2() {
@@ -58,10 +59,11 @@ public class Board extends JPanel {
     int num_bricks = rndm2;
     // Log the number of bricks
     // System.out.println("Number of bricks on x: " + num_bricks);
-    newGame(num_bricks); // half because x and y req
+    newGame(num_bricks, 2); // half because x and y req
   }
 
-  private void newGame(int NumberOfBricks) {
+  private void newGame(int NumberOfBricks, int numberOfBalls) {
+  ballController = new BallController(numberOfBalls);
     // if lvl = 1, stop the timer
     if (lvl == 1) {
       timer.stop();
@@ -98,7 +100,7 @@ public class Board extends JPanel {
       ball = new Ball();
 
       ball2 = new Ball();
-      
+
       paddle = new Paddle();
 
       int k = 0;
@@ -113,7 +115,7 @@ public class Board extends JPanel {
 
           bricks[k] = new Brick(j * 40 + 30, i * 10 + 50);
           k++;
-          if (k == NumberOfBricks*rndm) {
+          if (k == NumberOfBricks * rndm) {
             done = true;
           }
         }
@@ -158,8 +160,11 @@ public class Board extends JPanel {
 
   private void drawObjects(Graphics2D g2d) {
 
-    g2d.drawImage(ball.getImage(), ball.getX(), ball.getY(),
-        ball.getImageWidth(), ball.getImageHeight(), this);
+    for (Ball ball : ballController.getBalls()) {
+      g2d.drawImage(ball.getImage(), ball.getX(), ball.getY(),
+          ball.getImageWidth(), ball.getImageHeight(), this);
+    }
+
     g2d.drawImage(paddle.getImage(), paddle.getX(), paddle.getY(),
         paddle.getImageWidth(), paddle.getImageHeight(), this);
 
@@ -168,18 +173,6 @@ public class Board extends JPanel {
       if (bricks[i] == null) {
         continue;
       }
-
-      // if (bricks.length <= i) {
-      // System.out.println("ITS BROKEN IN DRAW OJBECTS");
-
-      // break;
-      // }
-
-      // print i and bricks.length and method name
-      // System.out.println("i: " + i + " bricks.length: " + bricks.length + " method:
-      // drawObjects");
-      // print value of bricks
-      // System.out.println("bricks: " + bricks[i]);
 
       if (!bricks[i].isDestroyed()) {
 
@@ -228,7 +221,7 @@ public class Board extends JPanel {
 
   private void doGameCycle() {
 
-    ball.move();
+    ballController.move();
     paddle.move();
     checkCollision();
     repaint();
@@ -241,139 +234,120 @@ public class Board extends JPanel {
   }
 
   private void checkCollision() {
+    for (Ball ball : ballController.getBalls()) {
 
-    // ball goes off the bottom of the panel
-    if (ball.getRect().getMaxY() > Commons.BOTTOM_EDGE) { // returns largest y-coordinate of framing rectangle
-
-      stopGame(); // you lose!
-    }
-
-    // determine whether user has destroyed all the bricks
-    int j = 0;
-    for (int i = 0; i < bricks.length; i++) {
-      if (bricks[i] == null) {
-        continue;
-      }
-      // logs
-      // System.out.println("Bricks - 223");
-      // System.out.println(bricks.length);
-      // System.out.println("i - 225");
-      // System.out.println(i);
-
-      // if (bricks.length <= i) { // NOTE ERROR IS NOT HERE
-      // System.out.println("Bricks IS LESS THAN I");
-      // break;
-      // }
-
-      // print i and bricks.length and method name
-      // System.out.println("i: " + i + " bricks.length: " + bricks.length + " method:
-      // checkCollision");
-
-      if (bricks[i].isDestroyed()) {
-        j++;
-      }
-    }
-
-    if (j == bricks.length) {
-      if (lvl == 1)
-        stopGame();
-      message = "Victory!";
-      // message = "level 1 victory";
-      // stopGame();
-      gameInitLevel2();
-
-      // log that lvl 2 has started
-      // System.out.println("lvl 2 started");
-    }
-
-    // if ball and paddle collide
-    if ((ball.getRect()).intersects(paddle.getRect())) {
-
-      // get the left most x-coordinate of the ball and paddle
-      int paddleLPos = (int) paddle.getRect().getMinX();
-      int ballLPos = (int) ball.getRect().getMinX();
-
-      // paddle is 40 pixels wide; divide into 5 sections
-      int first = paddleLPos + 8;
-      int second = paddleLPos + 16;
-      int third = paddleLPos + 24;
-      int fourth = paddleLPos + 32;
-
-      if (ballLPos < first) { // ball hits paddle in left corner
-
-        ball.setXDir(-1); // to the left
-        ball.setYDir(-1); // up
+      // ball goes off the bottom of the panel
+      if (ball.getRect().getMaxY() > Commons.BOTTOM_EDGE) { // returns largest y-coordinate of framing rectangle
+        stopGame(); // you lose!
       }
 
-      if (ballLPos >= first && ballLPos < second) { // ball hits panel left of center
+      // determine whether user has destroyed all the bricks
+      int j = 0;
+      for (int i = 0; i < bricks.length; i++) {
+        if (bricks[i] == null) {
+          continue;
+        }
 
-        ball.setXDir(-1); // to the left
-        ball.setYDir(-1 * ball.getYDir()); // reverse y-direction of ball
+        if (bricks[i].isDestroyed()) {
+          j++;
+        }
       }
 
-      if (ballLPos >= second && ballLPos < third) {
+      if (j == bricks.length) {
+        if (lvl == 1)
+          stopGame();
+        message = "Victory!";
+        // message = "level 1 victory";
+        // stopGame();
+        gameInitLevel2();
 
-        // ball moves straight up
-        ball.setXDir(0);
-        ball.setYDir(-1);
+        // log that lvl 2 has started
+        // System.out.println("lvl 2 started");
       }
 
-      if (ballLPos >= third && ballLPos < fourth) {
+      // if ball and paddle collide
+      if ((ball.getRect()).intersects(paddle.getRect())) {
 
-        ball.setXDir(1);
-        ball.setYDir(-1 * ball.getYDir()); // reverse y-direction ball
+        // get the left most x-coordinate of the ball and paddle
+        int paddleLPos = (int) paddle.getRect().getMinX();
+        int ballLPos = (int) ball.getRect().getMinX();
+
+        // paddle is 40 pixels wide; divide into 5 sections
+        int first = paddleLPos + 8;
+        int second = paddleLPos + 16;
+        int third = paddleLPos + 24;
+        int fourth = paddleLPos + 32;
+
+        if (ballLPos < first) { // ball hits paddle in left corner
+
+          ball.setXDir(-1); // to the left
+          ball.setYDir(-1); // up
+        }
+
+        if (ballLPos >= first && ballLPos < second) { // ball hits panel left of center
+
+          ball.setXDir(-1); // to the left
+          ball.setYDir(-1 * ball.getYDir()); // reverse y-direction of ball
+        }
+
+        if (ballLPos >= second && ballLPos < third) {
+
+          // ball moves straight up
+          ball.setXDir(0);
+          ball.setYDir(-1);
+        }
+
+        if (ballLPos >= third && ballLPos < fourth) {
+
+          ball.setXDir(1);
+          ball.setYDir(-1 * ball.getYDir()); // reverse y-direction ball
+        }
+
+        if (ballLPos > fourth) {
+
+          ball.setXDir(1); // to the right
+          ball.setYDir(-1); // up
+        }
       }
 
-      if (ballLPos > fourth) {
+      // if ball and brick collide
+      for (int i = 0; i < bricks.length; i++) {
+        if (bricks[i] != null && (ball.getRect()).intersects(bricks[i].getRect())) {
 
-        ball.setXDir(1); // to the right
-        ball.setYDir(-1); // up
-      }
-    }
+          // get the coordinate of the upper left corner of the ball, as well as the ball
+          // width and height
+          int ballLeft = (int) ball.getRect().getMinX();
+          int ballHeight = (int) ball.getRect().getHeight();
+          int ballWidth = (int) ball.getRect().getWidth();
+          int ballTop = (int) ball.getRect().getMinY();
 
-    // if ball and brick collide
-    for (int i = 0; i < bricks.length; i++) {
-      // Log bricks and i
-      // System.out.println("Bricks"); // bricks at 1 and i at 0, twice: cont
-      // System.out.println(bricks.length);
-      // System.out.println("i");
-      // System.out.println(i);
+          // determine points just above, below, to the left and right of ball
+          var pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+          var pointLeft = new Point(ballLeft - 1, ballTop);
+          var pointTop = new Point(ballLeft, ballTop - 1);
+          var pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
+          // this isdestroyed isnt broken
+          if (!bricks[i].isDestroyed()) {
 
-      if (bricks[i] != null && (ball.getRect()).intersects(bricks[i].getRect())) {
+            if (bricks[i].getRect().contains(pointRight)) {
 
-        // get the coordinate of the upper left corner of the ball, as well as the ball
-        // width and height
-        int ballLeft = (int) ball.getRect().getMinX();
-        int ballHeight = (int) ball.getRect().getHeight();
-        int ballWidth = (int) ball.getRect().getWidth();
-        int ballTop = (int) ball.getRect().getMinY();
+              ball.setXDir(-1); // the right hand side of the ball was touching the brick, so the ball must now
+                                // move left.
+            } else if (bricks[i].getRect().contains(pointLeft)) {
 
-        // determine points just above, below, to the left and right of ball
-        var pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
-        var pointLeft = new Point(ballLeft - 1, ballTop);
-        var pointTop = new Point(ballLeft, ballTop - 1);
-        var pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
-        // this isdestroyed isnt broken
-        if (!bricks[i].isDestroyed()) {
+              ball.setXDir(1);
+            }
 
-          if (bricks[i].getRect().contains(pointRight)) {
+            if (bricks[i].getRect().contains(pointTop)) {
 
-            ball.setXDir(-1); // the right hand side of the ball was touching the brick, so the ball must now
-                              // move left.
-          } else if (bricks[i].getRect().contains(pointLeft)) {
+              ball.setYDir(1);
+            } else if (bricks[i].getRect().contains(pointBottom)) {
 
-            ball.setXDir(1);
+              ball.setYDir(-1);
+            }
+
+            bricks[i].setDestroyed(true);
           }
-
-          if (bricks[i].getRect().contains(pointTop)) {
-
-            ball.setYDir(1);
-          } else if (bricks[i].getRect().contains(pointBottom)) {
-
-            ball.setYDir(-1);
-          }
-
-          bricks[i].setDestroyed(true);
         }
       }
     }
