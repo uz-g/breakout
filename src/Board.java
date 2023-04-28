@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point; // identify whether ball collides with brick
 import java.awt.RenderingHints;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,7 +64,7 @@ public class Board extends JPanel {
   }
 
   private void newGame(int NumberOfBricks, int numberOfBalls) {
-  ballController = new BallController(numberOfBalls);
+    ballController = new BallController(numberOfBalls);
     // if lvl = 1, stop the timer
     if (lvl == 1) {
       timer.stop();
@@ -129,7 +130,7 @@ public class Board extends JPanel {
         }
       }
 
-      timer = new Timer(Commons.PERIOD, new GameCycle());
+      timer = new Timer(Commons.PERIOD * 2, new GameCycle());
       timer.start();
     }
 
@@ -235,6 +236,8 @@ public class Board extends JPanel {
 
   private void checkCollision() {
     for (Ball ball : ballController.getBalls()) {
+      
+      bounceOnBounds(ball);
 
       // ball goes off the bottom of the panel
       if (ball.getRect().getMaxY() > Commons.BOTTOM_EDGE) { // returns largest y-coordinate of framing rectangle
@@ -266,7 +269,8 @@ public class Board extends JPanel {
       }
 
       // if ball and paddle collide
-      if ((ball.getRect()).intersects(paddle.getRect())) {
+      if (sweptAABBCollision(ball.getRect(), paddle.getRect(), ball.getXDir(), ball.getYDir())) {
+        // if ((ball.getRect()).intersects(paddle.getRect())) {
 
         // get the left most x-coordinate of the ball and paddle
         int paddleLPos = (int) paddle.getRect().getMinX();
@@ -312,44 +316,77 @@ public class Board extends JPanel {
 
       // if ball and brick collide
       for (int i = 0; i < bricks.length; i++) {
-        if (bricks[i] != null && (ball.getRect()).intersects(bricks[i].getRect())) {
+        if (bricks[i] != null) {
+          if (sweptAABBCollision(ball.getRect(), bricks[i].getRect(), ball.getXDir(), ball.getYDir())) {
+            // Add the brick collision logic here (same as before)
+            // if (bricks[i] != null && (ball.getRect()).intersects(bricks[i].getRect())) {
 
-          // get the coordinate of the upper left corner of the ball, as well as the ball
-          // width and height
-          int ballLeft = (int) ball.getRect().getMinX();
-          int ballHeight = (int) ball.getRect().getHeight();
-          int ballWidth = (int) ball.getRect().getWidth();
-          int ballTop = (int) ball.getRect().getMinY();
+            // get the coordinate of the upper left corner of the ball, as well as the ball
+            // width and height
+            int ballLeft = (int) ball.getRect().getMinX();
+            int ballHeight = (int) ball.getRect().getHeight();
+            int ballWidth = (int) ball.getRect().getWidth();
+            int ballTop = (int) ball.getRect().getMinY();
 
-          // determine points just above, below, to the left and right of ball
-          var pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
-          var pointLeft = new Point(ballLeft - 1, ballTop);
-          var pointTop = new Point(ballLeft, ballTop - 1);
-          var pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
-          // this isdestroyed isnt broken
-          if (!bricks[i].isDestroyed()) {
+            // determine points just above, below, to the left and right of ball
+            var pointRight = new Point(ballLeft + ballWidth + 1, ballTop);
+            var pointLeft = new Point(ballLeft - 1, ballTop);
+            var pointTop = new Point(ballLeft, ballTop - 1);
+            var pointBottom = new Point(ballLeft, ballTop + ballHeight + 1);
+            // this isdestroyed isnt broken
+            if (!bricks[i].isDestroyed()) {
 
-            if (bricks[i].getRect().contains(pointRight)) {
+              if (bricks[i].getRect().contains(pointRight)) {
 
-              ball.setXDir(-1); // the right hand side of the ball was touching the brick, so the ball must now
-                                // move left.
-            } else if (bricks[i].getRect().contains(pointLeft)) {
+                ball.setXDir(-1); // the right hand side of the ball was touching the brick, so the ball must now
+                                  // move left.
+              } else if (bricks[i].getRect().contains(pointLeft)) {
 
-              ball.setXDir(1);
+                ball.setXDir(1);
+              }
+
+              if (bricks[i].getRect().contains(pointTop)) {
+
+                ball.setYDir(1);
+              } else if (bricks[i].getRect().contains(pointBottom)) {
+
+                ball.setYDir(-1);
+              }
+
+              bricks[i].setDestroyed(true);
             }
-
-            if (bricks[i].getRect().contains(pointTop)) {
-
-              ball.setYDir(1);
-            } else if (bricks[i].getRect().contains(pointBottom)) {
-
-              ball.setYDir(-1);
-            }
-
-            bricks[i].setDestroyed(true);
           }
         }
       }
     }
+  }
+
+  private void bounceOnBounds(Ball ball) {
+    Rectangle ballRect = ball.getRect();
+
+    // Check if the ball has gone out of bounds on the left or right side
+    if (ballRect.getMinX() < 0 || ballRect.getMaxX() > Commons.WIDTH) {
+      ball.setXDir(-ball.getXDir()); // Reverse the x-direction of the ball
+    }
+
+    // Check if the ball has gone out of bounds on the top side
+    if (ballRect.getMinY() < 0) {
+      ball.setYDir(-ball.getYDir()); // Reverse the y-direction of the ball
+    }
+  }
+
+  private boolean sweptAABBCollision(Rectangle ballRect, Rectangle targetRect, int xDir, int yDir) {
+    // Check for a collision in the x-direction
+    Rectangle expandedTargetX = new Rectangle(targetRect.x - xDir, targetRect.y, targetRect.width + Math.abs(xDir),
+        targetRect.height);
+    if (expandedTargetX.intersects(ballRect)) {
+      // Check for a collision in the y-direction
+      Rectangle expandedTargetY = new Rectangle(targetRect.x, targetRect.y - yDir, targetRect.width,
+          targetRect.height + Math.abs(yDir));
+      if (expandedTargetY.intersects(ballRect)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

@@ -55,6 +55,10 @@ public class Ball extends Sprite {
     y = Commons.INIT_BALL_Y;
   }
 
+  public int getXDir() {
+    return xdir;
+  }
+
   void setXDir(int x) {
 
     xdir = x;
