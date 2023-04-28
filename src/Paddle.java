@@ -18,6 +18,7 @@ public class Paddle extends Sprite {
     resetState();
   }
 
+  
   private void loadImage() {
 
     var ii = new ImageIcon("src/images_breakout/paddle.png");

@@ -18,6 +18,7 @@ public class Main extends JFrame {
     pack();
   }
 
+  
   public static void main(String[] args) {
 
     EventQueue.invokeLater(new Runnable() {

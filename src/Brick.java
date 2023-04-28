@@ -10,6 +10,7 @@ public class Brick extends Sprite {
     initBrick(x, y);
   }
 
+  
   private void initBrick(int x, int y) {
 
     this.x = x;

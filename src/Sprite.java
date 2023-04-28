@@ -23,6 +23,7 @@ public class Sprite {
 
     this.y = y;
   }
+  
 
   int getY() {
 

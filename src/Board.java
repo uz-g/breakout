@@ -49,6 +49,7 @@ public class Board extends JPanel {
 
     gameInit();
   }
+  
 
   private void gameInit() {
     newGame(30, 1);

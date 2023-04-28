@@ -20,6 +20,7 @@ public class Ball extends Sprite {
     getImageDimensions();
     resetState();
   }
+  
 
   private void loadImage() {
 
