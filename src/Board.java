@@ -51,7 +51,7 @@ public class Board extends JPanel {
   }
 
   private void gameInit() {
-    newGame(1, 1);
+    newGame(30, 1);
   }
 
   private void gameInitLevel2() {
@@ -130,7 +130,7 @@ public class Board extends JPanel {
         }
       }
 
-      timer = new Timer(Commons.PERIOD * 2, new GameCycle());
+      timer = new Timer(Commons.PERIOD / 2, new GameCycle());
       timer.start();
     }
 
