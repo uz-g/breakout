@@ -13,6 +13,7 @@ public class Ball extends Sprite {
   private void initBall() {
 
     xdir = 1;
+
     ydir = -1;
 
     loadImage();
