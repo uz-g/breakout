@@ -98,6 +98,7 @@ public class Board extends JPanel {
       timer = new Timer(Commons.PERIOD, new GameCycle());
       timer.start();
     } else {
+      lvl = 1;
       bricks = new Brick[NumberOfBricks * rndm];
       ball = new Ball();
 
@@ -233,6 +234,7 @@ public class Board extends JPanel {
 
     inGame = false;
     timer.stop();
+    lvl = 1;
   }
 
   private void checkCollision() {
@@ -258,16 +260,30 @@ public class Board extends JPanel {
       }
 
       if (j == bricks.length) {
+        // if(lvl == 1 || j == (int) (rndm2+rndm)){
+        //   message = "lvl 2 victory";
+        //   stopGame();
+        // }
+
+
+        // if (lvl == 1){
+        //   stopGame();
+        // }
+        
+
+        System.out.println("bricks length: " + bricks.length + " j: " + j);
+        
         if (lvl == 1){
-          stopGame();
+          if(j == (int) (rndm2+rndm)){
+            message = "victory";
+            stopGame();
+          }
         }
-        // code reaches message = "victory" even though it is a level 2 loss, it should say game over, solve this problem
-
-
-        message = "Victory!";
+        
         
        
-        gameInitLevel2();
+        if (lvl == 0)
+          gameInitLevel2();
       }
 
       // if ball and paddle collide
