@@ -52,7 +52,7 @@ public class Board extends JPanel {
   
 
   private void gameInit() {
-    newGame(30, 1);
+    newGame(1, 1);
   }
 
   private void gameInitLevel2() {
@@ -258,15 +258,16 @@ public class Board extends JPanel {
       }
 
       if (j == bricks.length) {
-        if (lvl == 1)
+        if (lvl == 1){
           stopGame();
-        message = "Victory!";
-        // message = "level 1 victory";
-        // stopGame();
-        gameInitLevel2();
+        }
+        // code reaches message = "victory" even though it is a level 2 loss, it should say game over, solve this problem
 
-        // log that lvl 2 has started
-        // System.out.println("lvl 2 started");
+
+        message = "Victory!";
+        
+       
+        gameInitLevel2();
       }
 
       // if ball and paddle collide
