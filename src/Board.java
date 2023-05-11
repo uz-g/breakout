@@ -97,8 +97,7 @@ public class Board extends JPanel {
 
       timer = new Timer(Commons.PERIOD, new GameCycle());
       timer.start();
-    } else {
-      lvl = 1;
+    } else if(lvl == 1){
       bricks = new Brick[NumberOfBricks * rndm];
       ball = new Ball();
 
@@ -120,6 +119,9 @@ public class Board extends JPanel {
           k++;
           if (k == NumberOfBricks * rndm) {
             done = true;
+          }
+          else{
+            
           }
         }
       }
