@@ -24,16 +24,24 @@ public class Board extends JPanel {
   private Ball ball2;
   private Paddle paddle;
   private Brick[] bricks;
+  private Boss[] boss;
   private boolean inGame = true;
   private boolean done;
 
   public static int lvl = 0;
-  private int rndm = (int) (Math.random() * 6) + 1;
-  private int rndm2 = (int) (Math.random() * 5) + 1;
+  // private int rndm = (int) (Math.random() * 6) + 1;
+  // private int rndm2 = (int) (Math.random() * 5) + 1;
+  private int rndm = 1;
+  private int rndm2 = 1;
+  //change later
 
   public static boolean getl2() {
     // static boolean l2 = lvl == 1;
     return lvl == 1;
+  }
+
+  public static boolean getl3() {
+    return lvl == 2;
   }
 
   public Board() {
@@ -49,10 +57,10 @@ public class Board extends JPanel {
 
     gameInit();
   }
-  
 
   private void gameInit() {
     newGame(1, 1);
+    // change later
   }
 
   private void gameInitLevel2() {
@@ -62,6 +70,14 @@ public class Board extends JPanel {
     // Log the number of bricks
     // System.out.println("Number of bricks on x: " + num_bricks);
     newGame(num_bricks, 2); // half because x and y req
+    // change later
+  }
+
+  private void gameInitLevel3() {
+    done = false;
+    lvl = 2;
+    int num_bricks = 1;
+    newGame(num_bricks, 1);
   }
 
   private void newGame(int NumberOfBricks, int numberOfBalls) {
@@ -97,7 +113,7 @@ public class Board extends JPanel {
 
       timer = new Timer(Commons.PERIOD, new GameCycle());
       timer.start();
-    } else if(lvl == 1){
+    } else if (lvl == 1) {
       bricks = new Brick[NumberOfBricks * rndm];
       ball = new Ball();
 
@@ -117,12 +133,8 @@ public class Board extends JPanel {
 
           bricks[k] = new Brick(j * 40 + 30, i * 10 + 50);
           k++;
-          if (k == NumberOfBricks * rndm) {
+          if (k == NumberOfBricks * rndm)
             done = true;
-          }
-          else{
-            
-          }
         }
       }
 
@@ -134,7 +146,33 @@ public class Board extends JPanel {
         }
       }
 
-      timer = new Timer(Commons.PERIOD / 2, new GameCycle());
+      timer = new Timer((Commons.PERIOD / 2), new GameCycle());
+      timer.start();
+    } else {
+      bricks = new Brick[NumberOfBricks];
+      ball = new Ball();
+      paddle = new Paddle();
+
+      int k = 0;
+
+      for (int i = 0; i < 5; i++) {
+        if (done)
+          break;
+
+        for (int j = 0; j < 6; j++) {
+          if (done)
+            break;
+
+          bricks[k] = new Brick(j * 40 + 30, i * 10 + 50);
+          k++;
+          if (k == NumberOfBricks) {
+            // break;
+            done = true;
+          }
+        }
+      }
+
+      timer = new Timer(Commons.PERIOD * 2, new GameCycle());
       timer.start();
     }
 
@@ -236,12 +274,11 @@ public class Board extends JPanel {
 
     inGame = false;
     timer.stop();
-    lvl = 1;
   }
 
   private void checkCollision() {
     for (Ball ball : ballController.getBalls()) {
-      
+
       bounceOnBounds(ball);
 
       // ball goes off the bottom of the panel
@@ -262,28 +299,19 @@ public class Board extends JPanel {
       }
 
       if (j == bricks.length) {
-        // if(lvl == 1 || j == (int) (rndm2+rndm)){
-        //   message = "lvl 2 victory";
-        //   stopGame();
-        // }
-
-
-        // if (lvl == 1){
-        //   stopGame();
-        // }
-        
 
         System.out.println("bricks length: " + bricks.length + " j: " + j);
-        
-        if (lvl == 1){
-          if(j == (int) (rndm2+rndm)){
-            message = "victory";
-            stopGame();
+
+        if (lvl == 1) {
+          if (j == bricks.length) {
+            gameInitLevel3();
           }
         }
-        
-        
-       
+        if (lvl == 2 && j == 1) {
+          message = "victory";
+          stopGame();
+        }
+
         if (lvl == 0)
           gameInitLevel2();
       }

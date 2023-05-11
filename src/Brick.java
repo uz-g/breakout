@@ -4,6 +4,7 @@ public class Brick extends Sprite {
 
   private boolean destroyed;
   private boolean l2 = Board.getl2();
+  private boolean l3 = Board.getl3();
 
   public Brick(int x, int y) {
 
@@ -27,7 +28,10 @@ public class Brick extends Sprite {
     if (l2) {
       var ii = new ImageIcon("src/images_breakout/brick2.png");
       image = ii.getImage();
-    } else {
+    } else if (l3){
+      var ii = new ImageIcon("src/images_breakout/boss.png");
+      image = ii.getImage();
+    } else{
       var ii = new ImageIcon("src/images_breakout/brick.png");
       image = ii.getImage();
     }
