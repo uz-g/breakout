@@ -354,6 +354,7 @@ public class Board extends JPanel {
 
       // if ball and brick collide
       for (int i = 0; i < bricks.length; i++) {
+        int boss_hit = 0;
         if (bricks[i] != null) {
           if (sweptAABBCollision(ball.getRect(), bricks[i].getRect(), ball.getXDir(), ball.getYDir())) {
             // Add the brick collision logic here (same as before)
@@ -391,7 +392,17 @@ public class Board extends JPanel {
                 ball.setYDir(-1);
               }
 
-              bricks[i].setDestroyed(true);
+              if(lvl == 2){
+                if (boss_hit == 2){
+                  bricks[0].setDestroyed(true);
+                  boss_hit = 0;
+                } else{
+                  boss_hit++;
+                }
+              } else {
+                bricks[i].setDestroyed(true);
+              }
+
             }
           }
         }
