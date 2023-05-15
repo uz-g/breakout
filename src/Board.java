@@ -35,7 +35,6 @@ public class Board extends JPanel {
   //change later
 
   public static boolean getl2() {
-    // static boolean l2 = lvl == 1;
     return lvl == 1;
   }
 
@@ -148,11 +147,19 @@ public class Board extends JPanel {
       timer = new Timer((Commons.PERIOD / 2), new GameCycle());
       timer.start();
     } else if (lvl == 2){
+      done = false;
       bricks = new Brick[1];
       ball = new Ball();
       paddle = new Paddle();
 
-      bricks[0] = new Brick(30, 50);
+      bricks[0] = new Brick(80, 60);
+
+
+      for (int i = 0; i < bricks.length; i++) {
+        if (bricks[i] == null) {
+          System.out.println("bricks[" + i + "] is null");
+        }
+      }
 
       timer = new Timer(Commons.PERIOD * 2, new GameCycle());
       timer.start();
@@ -287,9 +294,10 @@ public class Board extends JPanel {
         if (lvl == 1) {
           if (j == bricks.length) {
             gameInitLevel3();
+            j=0;
           }
         }
-        if (lvl == 2 && j == 2) {
+        if (lvl == 2 && j == 1) {
           message = "victory";
           stopGame();
         }
