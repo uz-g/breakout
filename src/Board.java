@@ -24,7 +24,6 @@ public class Board extends JPanel {
   private Ball ball2;
   private Paddle paddle;
   private Brick[] bricks;
-  private Boss[] boss;
   private boolean inGame = true;
   private boolean done;
 
@@ -148,29 +147,12 @@ public class Board extends JPanel {
 
       timer = new Timer((Commons.PERIOD / 2), new GameCycle());
       timer.start();
-    } else {
-      bricks = new Brick[NumberOfBricks];
+    } else if (lvl == 2){
+      bricks = new Brick[1];
       ball = new Ball();
       paddle = new Paddle();
 
-      int k = 0;
-
-      for (int i = 0; i < 5; i++) {
-        if (done)
-          break;
-
-        for (int j = 0; j < 6; j++) {
-          if (done)
-            break;
-
-          bricks[k] = new Brick(j * 40 + 30, i * 10 + 50);
-          k++;
-          if (k == NumberOfBricks) {
-            // break;
-            done = true;
-          }
-        }
-      }
+      bricks[0] = new Brick(30, 50);
 
       timer = new Timer(Commons.PERIOD * 2, new GameCycle());
       timer.start();
@@ -300,14 +282,14 @@ public class Board extends JPanel {
 
       if (j == bricks.length) {
 
-        System.out.println("bricks length: " + bricks.length + " j: " + j);
+        //System.out.println("bricks length: " + bricks.length + " j: " + j);
 
         if (lvl == 1) {
           if (j == bricks.length) {
             gameInitLevel3();
           }
         }
-        if (lvl == 2 && j == 1) {
+        if (lvl == 2 && j == 2) {
           message = "victory";
           stopGame();
         }
