@@ -26,6 +26,7 @@ public class Board extends JPanel {
   private Brick[] bricks;
   private boolean inGame = true;
   private boolean done;
+  int boss_hit = 0;
 
   public static int lvl = 0;
   // private int rndm = (int) (Math.random() * 6) + 1;
@@ -286,11 +287,12 @@ public class Board extends JPanel {
           j++;
         }
       }
+      if (j==1){
+        PowerUp powerUp = new PowerUp();
+        powerUp.activate_powerup();
+      }
 
       if (j == bricks.length) {
-
-        //System.out.println("bricks length: " + bricks.length + " j: " + j);
-
         if (lvl == 1) {
           if (j == bricks.length) {
             gameInitLevel3();
@@ -354,7 +356,6 @@ public class Board extends JPanel {
 
       // if ball and brick collide
       for (int i = 0; i < bricks.length; i++) {
-        int boss_hit = 0;
         if (bricks[i] != null) {
           if (sweptAABBCollision(ball.getRect(), bricks[i].getRect(), ball.getXDir(), ball.getYDir())) {
             // Add the brick collision logic here (same as before)
@@ -393,7 +394,7 @@ public class Board extends JPanel {
               }
 
               if(lvl == 2){
-                if (boss_hit == 2){
+                if (boss_hit == 4){
                   bricks[0].setDestroyed(true);
                   boss_hit = 0;
                 } else{

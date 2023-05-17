@@ -4,6 +4,8 @@ import javax.swing.ImageIcon;
 public class Paddle extends Sprite {
 
   private int dx;
+  private boolean paddle_big = PowerUp.paddle_big();
+  private boolean paddle_fast = PowerUp.paddle_fast();
 
   public Paddle() {
 
@@ -21,8 +23,14 @@ public class Paddle extends Sprite {
   
   private void loadImage() {
 
-    var ii = new ImageIcon("src/images_breakout/paddle.png");
-    image = ii.getImage();
+    if(paddle_big == false){
+      var ii = new ImageIcon("src/images_breakout/paddle.png");
+      image = ii.getImage();
+    }else{
+      var ii = new ImageIcon("src/images_breakout/paddle_big.png");
+      image = ii.getImage();
+    }
+      
   }
 
   void move() {
@@ -46,13 +54,23 @@ public class Paddle extends Sprite {
 
     if (key == KeyEvent.VK_LEFT) {
 
-      dx = -1;
+      if(paddle_fast == true){
+        dx = -2;
+      }
+      else{
+        dx = -1;
+      }
 
     }
 
     if (key == KeyEvent.VK_RIGHT) {
 
-      dx = 1;
+      if(paddle_fast == true){
+        dx = 2;
+      }
+      else{
+        dx = 1;
+      }
     }
   }
 
