@@ -55,7 +55,7 @@ public class Paddle extends Sprite {
     if (key == KeyEvent.VK_LEFT) {
 
       if(paddle_fast == true){
-        dx = -2;
+        dx = -3;
       }
       else{
         dx = -1;
@@ -66,7 +66,7 @@ public class Paddle extends Sprite {
     if (key == KeyEvent.VK_RIGHT) {
 
       if(paddle_fast == true){
-        dx = 2;
+        dx = 3;
       }
       else{
         dx = 1;

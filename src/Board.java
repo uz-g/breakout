@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
 
 public class Board extends JPanel {
 
-  private Timer timer;
+  private static Timer timer;
   private String message = "Game Over";
   private BallController ballController;
   private Ball ball;
@@ -34,6 +34,9 @@ public class Board extends JPanel {
   private int rndm = 1;
   private int rndm2 = 1;
   //change later
+  public static void setGameSpeed(int speed) {
+    timer.setDelay(Commons.PERIOD*speed);
+  }
 
   public static boolean getl2() {
     return lvl == 1;
@@ -287,7 +290,7 @@ public class Board extends JPanel {
           j++;
         }
       }
-      if (j==1){
+      if (j==1 && lvl != 2){
         PowerUp powerUp = new PowerUp();
         powerUp.activate_powerup();
       }

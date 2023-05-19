@@ -12,7 +12,7 @@ public class PowerUp implements ActionListener {
     public PowerUp() {
         this.paddle = paddle;
         this.ballController = ballController;
-        timer = new Timer(5000, this); // Set the timer interval to 5 seconds (adjust as needed)
+        timer = new Timer(500, this); // Set the timer interval to 5 seconds (adjust as needed)
         timer.setRepeats(false); // Set the timer to only trigger once
     }
 
@@ -32,10 +32,14 @@ public class PowerUp implements ActionListener {
         switch (powerUpType) {
             case 0: // Larger paddle
                 paddle_big = true;
+                System.out.println("paddle_big");
                 break;
-            case 1: // Slower ball
+            case 1: // Slower game
+                Board.setGameSpeed(2);
+                System.out.println("slower game");
                 break;
             case 2: // Faster paddle
+                System.out.println("paddle_fast");
                 paddle_fast = true;
                 break;
         }
