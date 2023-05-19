@@ -12,7 +12,7 @@ public class PowerUp implements ActionListener {
     public PowerUp() {
         this.paddle = paddle;
         this.ballController = ballController;
-        timer = new Timer(500, this); // Set the timer interval to 5 seconds (adjust as needed)
+        timer = new Timer(5000, this); // Set the timer interval to 5 seconds (adjust as needed)
         timer.setRepeats(false); // Set the timer to only trigger once
     }
 

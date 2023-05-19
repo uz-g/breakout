@@ -26,6 +26,7 @@ public class Board extends JPanel {
   private Brick[] bricks;
   private boolean inGame = true;
   private boolean done;
+  private boolean power_done;
   int boss_hit = 0;
 
   public static int lvl = 0;
@@ -36,6 +37,7 @@ public class Board extends JPanel {
   //change later
   public static void setGameSpeed(int speed) {
     timer.setDelay(Commons.PERIOD*speed);
+    
   }
 
   public static boolean getl2() {
@@ -88,7 +90,11 @@ public class Board extends JPanel {
     if (lvl == 1) {
       timer.stop();
     }
+    if (lvl == 2) {
+      timer.stop();
+    }
     if (lvl == 0) {
+      power_done = false;
       bricks = new Brick[NumberOfBricks];
 
       ball = new Ball();
@@ -116,6 +122,7 @@ public class Board extends JPanel {
       timer = new Timer(Commons.PERIOD, new GameCycle());
       timer.start();
     } else if (lvl == 1) {
+      power_done = false;
       bricks = new Brick[NumberOfBricks * rndm];
       ball = new Ball();
 
@@ -151,6 +158,7 @@ public class Board extends JPanel {
       timer = new Timer((Commons.PERIOD / 2), new GameCycle());
       timer.start();
     } else if (lvl == 2){
+      power_done = true;
       done = false;
       bricks = new Brick[1];
       ball = new Ball();
@@ -290,9 +298,11 @@ public class Board extends JPanel {
           j++;
         }
       }
-      if (j==1 && lvl != 2){
+      if (j==1 && lvl != 2 && power_done == false){
         PowerUp powerUp = new PowerUp();
         powerUp.activate_powerup();
+
+        power_done = true;
       }
 
       if (j == bricks.length) {
