@@ -19,9 +19,11 @@ public class Paddle extends Sprite {
 
     resetState();
   }
+  
+  
 
   
-  private void loadImage() {
+  private  void loadImage() {
 
     if(paddle_big == false){
       var ii = new ImageIcon("src/images_breakout/paddle.png");
@@ -34,6 +36,9 @@ public class Paddle extends Sprite {
   }
 
   void move() {
+    if(paddle_big){
+      loadImage();
+    }
 
     x += dx;
 
@@ -49,13 +54,16 @@ public class Paddle extends Sprite {
   }
 
   void keyPressed(KeyEvent e) {
+    if(paddle_big){
+      loadImage();
+    }
 
     int key = e.getKeyCode();
 
     if (key == KeyEvent.VK_LEFT) {
 
       if(paddle_fast == true){
-        dx = -3;
+        dx = -5;
       }
       else{
         dx = -1;
@@ -66,7 +74,7 @@ public class Paddle extends Sprite {
     if (key == KeyEvent.VK_RIGHT) {
 
       if(paddle_fast == true){
-        dx = 3;
+        dx = 5;
       }
       else{
         dx = 1;
@@ -90,6 +98,9 @@ public class Paddle extends Sprite {
   }
 
   private void resetState() {
+    if(paddle_big){
+      loadImage();
+    }
 
     x = Commons.INIT_PADDLE_X;
     y = Commons.INIT_PADDLE_Y;

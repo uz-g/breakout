@@ -30,13 +30,13 @@ public class Board extends JPanel {
   int boss_hit = 0;
 
   public static int lvl = 0;
-  // private int rndm = (int) (Math.random() * 6) + 1;
-  // private int rndm2 = (int) (Math.random() * 5) + 1;
-  private int rndm = 1;
-  private int rndm2 = 1;
+  private int rndm = (int) (Math.random() * 6) + 1;
+  private int rndm2 = (int) (Math.random() * 5) + 1;
+  // private int rndm = 1;
+  // private int rndm2 = 1;
   //change later
   public static void setGameSpeed(int speed) {
-    timer.setDelay(Commons.PERIOD*speed);
+    timer.setDelay(12);
     
   }
 
@@ -63,7 +63,7 @@ public class Board extends JPanel {
   }
 
   private void gameInit() {
-    newGame(1, 1);
+    newGame(2, 1);
     // change later
   }
 
@@ -155,7 +155,7 @@ public class Board extends JPanel {
         }
       }
 
-      timer = new Timer((Commons.PERIOD / 2), new GameCycle());
+      timer = new Timer((9), new GameCycle());
       timer.start();
     } else if (lvl == 2){
       power_done = true;
@@ -173,7 +173,7 @@ public class Board extends JPanel {
         }
       }
 
-      timer = new Timer(Commons.PERIOD * 2, new GameCycle());
+      timer = new Timer(Commons.PERIOD, new GameCycle());
       timer.start();
     }
 

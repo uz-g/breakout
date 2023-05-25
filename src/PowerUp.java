@@ -17,7 +17,6 @@ public class PowerUp implements ActionListener {
     }
 
     public static boolean paddle_big() {
-
         return paddle_big;
     }
     public static boolean paddle_fast(){
@@ -58,5 +57,6 @@ public class PowerUp implements ActionListener {
         // Reset the effects of the power-up
         paddle_big = false;
         paddle_fast = false;
+        Board.setGameSpeed(1);
     }
 }
