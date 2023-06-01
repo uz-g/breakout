@@ -8,8 +8,12 @@ public class PowerUp implements ActionListener {
     private BallController ballController;
     public static boolean paddle_big;
     public static boolean paddle_fast;
+    public String powerup = "none";
+    public String power(){
+        return powerup;
+    }
 
-    public PowerUp() {
+    public PowerUp(Paddle paddle) {
         this.paddle = paddle;
         this.ballController = ballController;
         timer = new Timer(5000, this); // Set the timer interval to 5 seconds (adjust as needed)
@@ -30,16 +34,20 @@ public class PowerUp implements ActionListener {
         // Apply the selected power-up effect
         switch (powerUpType) {
             case 0: // Larger paddle
-                paddle_big = true;
+                paddle.setPaddleBig();
                 System.out.println("paddle_big");
+                powerup = "big paddle";
                 break;
             case 1: // Slower game
                 Board.setGameSpeed(2);
                 System.out.println("slower game");
+                powerup = "slow game";
                 break;
+               
             case 2: // Faster paddle
                 System.out.println("paddle_fast");
-                paddle_fast = true;
+                paddle.setPaddleFast();
+                powerup = "fast paddle";
                 break;
         }
 
@@ -58,5 +66,6 @@ public class PowerUp implements ActionListener {
         paddle_big = false;
         paddle_fast = false;
         Board.setGameSpeed(1);
+        powerup = "none";
     }
 }

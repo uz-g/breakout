@@ -4,8 +4,8 @@ import javax.swing.ImageIcon;
 public class Paddle extends Sprite {
 
   private int dx;
-  private boolean paddle_big = PowerUp.paddle_big();
-  private boolean paddle_fast = PowerUp.paddle_fast();
+  private boolean paddle_big = PowerUp.paddle_big;
+  private boolean paddle_fast = PowerUp.paddle_fast;
 
   public Paddle() {
 
@@ -19,7 +19,13 @@ public class Paddle extends Sprite {
 
     resetState();
   }
-  
+  public void setPaddleBig(){
+    paddle_big = true;
+    loadImage();
+  }
+  public void setPaddleFast(){
+    paddle_fast = true;
+  }
   
 
   

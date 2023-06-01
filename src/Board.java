@@ -14,6 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+import javax.swing.JLabel;
+import javax.swing.JFrame;
+
 
 public class Board extends JPanel {
 
@@ -36,7 +40,7 @@ public class Board extends JPanel {
   // private int rndm2 = 1;
   //change later
   public static void setGameSpeed(int speed) {
-    timer.setDelay(12);
+    timer.setDelay(13);
     
   }
 
@@ -54,6 +58,9 @@ public class Board extends JPanel {
   }
 
   private void initBoard() {
+    JOptionPane.showMessageDialog(null, "click ok to start the game");
+
+   
 
     addKeyListener(new TAdapter());
     setFocusable(true);
@@ -155,8 +162,9 @@ public class Board extends JPanel {
         }
       }
 
-      timer = new Timer((9), new GameCycle());
+      timer = new Timer((6), new GameCycle());
       timer.start();
+      power_done = false;
     } else if (lvl == 2){
       power_done = true;
       done = false;
@@ -173,7 +181,7 @@ public class Board extends JPanel {
         }
       }
 
-      timer = new Timer(Commons.PERIOD, new GameCycle());
+      timer = new Timer(5, new GameCycle());
       timer.start();
     }
 
@@ -181,6 +189,8 @@ public class Board extends JPanel {
 
   @Override
   public void paintComponent(Graphics g) {
+  
+
     super.paintComponent(g);
 
     var g2d = (Graphics2D) g;
@@ -203,6 +213,10 @@ public class Board extends JPanel {
   }
 
   private void drawObjects(Graphics2D g2d) {
+    g2d.setColor(Color.BLACK);
+    g2d.setFont(new Font("Verdana", Font.BOLD, 12));
+    g2d.drawString("level: " + (lvl + 1), 10, 20); // Prints "Level: X" at (10, 20)
+
 
     for (Ball ball : ballController.getBalls()) {
       g2d.drawImage(ball.getImage(), ball.getX(), ball.getY(),
@@ -299,7 +313,7 @@ public class Board extends JPanel {
         }
       }
       if (j==1 && lvl != 2 && power_done == false){
-        PowerUp powerUp = new PowerUp();
+        PowerUp powerUp = new PowerUp(paddle);
         powerUp.activate_powerup();
 
         power_done = true;
