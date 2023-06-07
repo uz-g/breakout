@@ -34,8 +34,8 @@ public class Board extends JPanel {
   int boss_hit = 0;
 
   public static int lvl = 0;
-  private int rndm = (int) (Math.random() * 3) + 1;
-  private int rndm2 = (int) (Math.random() * 3) + 1;
+  private int rndm = (int) (Math.random() * 2) + 1;
+  private int rndm2 = (int) (Math.random() * 6) + 1;
   // private int rndm = 1;
   // private int rndm2 = 1;
   //change later
