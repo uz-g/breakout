@@ -40,7 +40,7 @@ public class Board extends JPanel {
   // private int rndm2 = 1;
   //change later
   public static void setGameSpeed(int speed) {
-    timer.setDelay(13);
+    timer.setDelay(4);
     
   }
 
@@ -70,7 +70,7 @@ public class Board extends JPanel {
   }
 
   private void gameInit() {
-    newGame(4, 1);
+    newGame(18, 1);
     // change later
   }
 
@@ -126,7 +126,7 @@ public class Board extends JPanel {
         }
       }
 
-      timer = new Timer(Commons.PERIOD, new GameCycle());
+      timer = new Timer(5, new GameCycle());
       timer.start();
     } else if (lvl == 1) {
       power_done = false;
