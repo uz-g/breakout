@@ -35,7 +35,7 @@ public class Board extends JPanel {
 
   public static int lvl = 0;
   private int rndm = (int) (Math.random() * 2) + 1;
-  private int rndm2 = (int) (Math.random() * 6) + 1;
+  private int rndm2 = (int) (Math.random() * 3) + 1;
   // private int rndm = 1;
   // private int rndm2 = 1;
   //change later
@@ -172,7 +172,7 @@ public class Board extends JPanel {
       ball = new Ball();
       paddle = new Paddle();
 
-      bricks[0] = new Brick(80, 60);
+      bricks[0] = new Brick(70, 40);
 
 
       for (int i = 0; i < bricks.length; i++) {
@@ -421,7 +421,7 @@ public class Board extends JPanel {
               }
 
               if(lvl == 2){
-                if (boss_hit == 4){
+                if (boss_hit == 6){
                   bricks[0].setDestroyed(true);
                   boss_hit = 0;
                 } else{
